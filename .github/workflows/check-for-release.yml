@@ -38,7 +38,7 @@ jobs:
                 fi
             
             - name: "Commit new version"
-              if: ${{ env.BUILD_IS_NEWER == 'true'}}
+              if: ${{ env.VERSION_IS_NEWER == 'true'}}
               run: |
                 git config user.name "github-actions[bot]"
                 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
