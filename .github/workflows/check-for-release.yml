@@ -18,23 +18,23 @@ jobs:
             
             - name: Check for desktop Version
               run: |
-                if ! grep -qiF android "./release-versions/notesnook-web"; then \
-                    echo "BUILD_IS_DESKTOP=true" >> "$GITHUB_ENV" \
-                    echo "::notice title=Version Type::Version type is desktop" \
-                else \
-                    echo "BUILD_IS_DESKTOP=false" >> "$GITHUB_ENV" \
-                    echo "::notice title=Version Type::Version type is android" \
+                if ! grep -qiF android "./release-versions/notesnook-web"; then
+                    echo "BUILD_IS_DESKTOP=true" >> "$GITHUB_ENV"
+                    echo "::notice title=Version Type::Version type is desktop"
+                else
+                    echo "BUILD_IS_DESKTOP=false" >> "$GITHUB_ENV"
+                    echo "::notice title=Version Type::Version type is android"
                 fi
 
             - name: Check if version is newer (version file is modified)
               if: ${{ env.BUILD_IS_DESKTOP == 'true'}}
               run: |
-                if [[ `git status --porcelain` ]]; then \
-                    echo "VERSION_IS_NEWER=true" >> "$GITHUB_ENV" \
-                    echo "::notice title=Version::Version is newer" \
-                else \
-                    echo "VERSION_IS_NEWER=false" >> "$GITHUB_ENV" \
-                    echo "::notice title=Version::Version is not newer" \
+                if [[ `git status --porcelain` ]]; then
+                    echo "VERSION_IS_NEWER=true" >> "$GITHUB_ENV"
+                    echo "::notice title=Version::Version is newer"
+                else
+                    echo "VERSION_IS_NEWER=false" >> "$GITHUB_ENV"
+                    echo "::notice title=Version::Version is not newer"
                 fi
             
             - name: "Commit new version"
