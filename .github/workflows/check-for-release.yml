@@ -3,6 +3,7 @@ on:
     schedule:
         # Should run every hour at 42 minutes (github suggests to not run at the start of the hour, so why not)
         - cron: '42 * * * *'
+    workflow_dispatch:
 
 jobs:
     get-version:
