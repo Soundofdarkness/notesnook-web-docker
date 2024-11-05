@@ -1,0 +1,49 @@
+name: Check for Notesnook Release
+on:
+    schedule:
+        # Should run every hour at 42 minutes (github suggests to not run at the start of the hour, so why not)
+        - cron: '42 * * * *'
+
+jobs:
+    get-version:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Fetch Release Version
+              run: |
+                curl -sL https://api.github.com/repos/streetwriters/notesnook/releases/latest | \
+                jq -r ".tag_name" > release-versions/notesnook-web.txt
+            
+            - name: Check for desktop Version
+              run: |
+                if ! grep -qiF android "./release-versions/notesnook-web"; then \
+                    echo "BUILD_IS_DESKTOP=true" >> "$GITHUB_ENV" \
+                    echo "::notice title=Version Type::Version type is desktop" \
+                else \
+                    echo "BUILD_IS_DESKTOP=false" >> "$GITHUB_ENV" \
+                    echo "::notice title=Version Type::Version type is android" \
+                fi
+
+            - name: Check if version is newer (version file is modified)
+              if: ${{ env.BUILD_IS_DESKTOP == 'true'}}
+              run: |
+                if [[ `git status --porcelain` ]]; then \
+                    echo "VERSION_IS_NEWER=true" >> "$GITHUB_ENV" \
+                    echo "::notice title=Version::Version is newer" \
+                else \
+                    echo "VERSION_IS_NEWER=false" >> "$GITHUB_ENV" \
+                    echo "::notice title=Version::Version is not newer" \
+                fi
+            
+            - name: "Commit new version"
+              if: ${{ env.BUILD_IS_NEWER == 'true'}}
+              run: |
+                git config user.name "github-actions[bot]"
+                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                git add release-versions/notesnook-web.txt
+                git commit -m "Version update"
+                git push
+
+
+
