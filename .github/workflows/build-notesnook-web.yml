@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: 'Soundofdarkness/notesnook-web'
+  IMAGE_NAME: 'soundofdarkness/notesnook-web'
 
 jobs:
     build:
