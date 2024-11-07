@@ -45,6 +45,7 @@ jobs:
             
             - name: "Build Webapp"
               run: |
+                cd notesnook
                 npm run build:web
             
             - name: "GHCR Login"
