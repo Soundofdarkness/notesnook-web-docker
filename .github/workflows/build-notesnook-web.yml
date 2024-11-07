@@ -36,7 +36,6 @@ jobs:
               with:
                 node-version: 'lts/iron'
                 check-latest: true
-                cache: 'npm'
             
             - name: "Install Dependencies"
               run: |
