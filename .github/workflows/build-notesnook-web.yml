@@ -18,13 +18,18 @@ jobs:
           attestations: write
           id-token: write
         steps:
+            - uses: actions/checkout@v4
+              name: "Fetch build repository"
+
             - name: "Get Version"
               run: |
                  version=$(<"./release-versions/notesnook-web.txt")
                  echo "NOTESNOOK_VERSION=${version}" >> "$GITHUB_ENV"
             - uses: actions/checkout@v4
+              name: "Fetch Notesnook repository"
               with:
                 repository: "streetwriters/notesnook"
+                path: 'notesnook'
                 ref: ${{ env.NOTESNOOK_VERSION }}
             
             - uses: actions/setup-node@v4
